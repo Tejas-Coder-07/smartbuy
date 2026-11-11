@@ -1,26 +1,245 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * SmartBuy design tokens.
+ * Indigo ink on a cool paper, with marigold reserved for one thing only:
+ * the price tag that marks the best recorded price.
+ */
+@theme {
+  --color-paper: #f4f5fa;
+  --color-surface: #ffffff;
+  --color-ink: #171a3a;
+  --color-muted: #5c6080;
+  --color-line: #daddea;
+  --color-line-strong: #b9bdd3;
+  --color-accent: #3538cd;
+  --color-accent-strong: #2a2ca8;
+  --color-accent-soft: #e9eafc;
+  --color-tag: #f5a300;
+  --color-tag-ink: #2b1d00;
+  --color-good: #0e7a4f;
+  --color-good-soft: #e3f4ec;
+  --color-caution: #a8470d;
+  --color-caution-soft: #fbeee3;
+  --color-danger: #b3261e;
+  --color-danger-soft: #fbe9e7;
+
+  --font-display: "Bricolage Grotesque Variable", "Figtree Variable", system-ui, sans-serif;
+  --font-sans: "Figtree Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --radius-control: 0.5rem;
+  --radius-panel: 0.875rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: light;
+  }
+
+  html {
+    background: var(--color-paper);
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+  }
+
+  a {
+    color: var(--color-accent);
+    text-underline-offset: 3px;
+  }
+
+  a:hover {
+    color: var(--color-accent-strong);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .price {
+    font-family: var(--font-display);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* The price tag: a label with a punched hole, as on a shop shelf. */
+  .price-tag {
+    position: relative;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    background: var(--color-tag);
+    color: var(--color-tag-ink);
+    padding: 0.4rem 0.85rem 0.4rem 1.6rem;
+    border-radius: 0.35rem 0.6rem 0.6rem 0.35rem;
+    clip-path: polygon(0.9rem 0, 100% 0, 100% 100%, 0.9rem 100%, 0 50%);
+    font-family: var(--font-display);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .price-tag::before {
+    content: "";
+    position: absolute;
+    left: 0.72rem;
+    top: 50%;
+    width: 0.4rem;
+    height: 0.4rem;
+    margin-top: -0.2rem;
+    border-radius: 999px;
+    background: var(--color-surface);
+  }
+
+  .field {
+    width: 100%;
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-control);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    padding: 0.6rem 0.75rem;
+    font: inherit;
+  }
+
+  .field::placeholder {
+    color: #8589a6;
+  }
+
+  .field:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+    border-color: var(--color-accent);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    border-radius: var(--radius-control);
+    border: 1px solid transparent;
+    padding: 0.6rem 1rem;
+    font: inherit;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .btn-primary {
+    background: var(--color-accent);
+    color: #ffffff;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: var(--color-accent-strong);
+    color: #ffffff;
+  }
+
+  .btn-quiet {
+    background: var(--color-surface);
+    color: var(--color-ink);
+    border-color: var(--color-line-strong);
+  }
+
+  .btn-quiet:hover:not(:disabled) {
+    border-color: var(--color-ink);
+    color: var(--color-ink);
+  }
+
+  .btn-small {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.875rem;
+  }
+
+  .panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-panel);
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, #e6e8f2 25%, #eef0f7 50%, #e6e8f2 75%);
+    background-size: 200% 100%;
+    border-radius: 0.5rem;
+    animation: skeleton 1.4s ease-in-out infinite;
+  }
+
+  @keyframes skeleton {
+    from {
+      background-position: 200% 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton {
+      animation: none;
+    }
+  }
+
+  table.data {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  table.data thead th {
+    text-align: left;
+    font-weight: 600;
+    color: var(--color-muted);
+    font-size: 0.8125rem;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--color-line);
+    white-space: nowrap;
+  }
+
+  table.data td,
+  table.data tbody th {
+    padding: 0.7rem 0.75rem;
+    border-bottom: 1px solid var(--color-line);
+    vertical-align: top;
+  }
+
+  table.data tr:last-child td,
+  table.data tbody tr:last-child th {
+    border-bottom: 0;
+  }
+
+  table.data .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
 }
