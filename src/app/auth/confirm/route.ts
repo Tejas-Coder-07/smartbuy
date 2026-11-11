@@ -30,5 +30,12 @@ export async function GET(request: NextRequest) {
     if (!error) return NextResponse.redirect(new URL(next, url.origin));
   }
 
+  // Supabase confirms the address before it redirects here. If only the final
+  // sign-in step failed (for example the link was opened in another browser),
+  // say so instead of calling the link broken.
+  if (code && next !== "/update-password") {
+    return NextResponse.redirect(new URL("/login?notice=confirmed", url.origin));
+  }
+
   return NextResponse.redirect(failure);
 }

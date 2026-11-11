@@ -35,10 +35,31 @@ until steps 1 and 2 are done.
 5. Leave **Confirm email** switched on (Authentication > Sign In / Providers >
    Email). The administrator check relies on confirmed email addresses.
 
-Supabase's built-in email sender is meant for testing and only sends a few
-emails an hour. Before inviting many people, set **Authentication > Emails >
-SMTP Settings** to Gmail (`smtp.gmail.com`, port 465, the Gmail address, and
-the app password from step 3).
+6. Send sign-in emails through Gmail. Supabase's built-in sender is meant for
+   testing and refuses to send more than a few emails an hour. Open
+   **Authentication > Emails > SMTP Settings**, switch on **Enable custom
+   SMTP**, and fill in:
+
+   | Field | Value |
+   |-------|-------|
+   | Sender email address | the project Gmail address |
+   | Sender name | SmartBuy |
+   | Host | `smtp.gmail.com` |
+   | Port number | `465` |
+   | Username | the project Gmail address |
+   | Password | a Gmail app password (see step 3), without spaces |
+
+7. Make the email links work in any browser. On the same **Emails** page open
+   the templates and replace the link address inside `href="..."`:
+
+   - **Confirm signup**
+     `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email&next=/dashboard`
+   - **Reset password**
+     `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/update-password`
+
+   With Supabase's default links, a link opened in a different browser from
+   the one used to sign up confirms the address but does not sign the person
+   in.
 
 ## 2. SerpApi (the product-data source)
 

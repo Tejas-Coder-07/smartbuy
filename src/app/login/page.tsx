@@ -30,11 +30,17 @@ async function LoginBody({ searchParams }: { searchParams: Promise<Record<string
   if (!isSupabaseConfigured()) return <SetupNotice />;
   const rawNext = Array.isArray(params.next) ? params.next[0] : params.next;
   const error = Array.isArray(params.error) ? params.error[0] : params.error;
+  const notice = Array.isArray(params.notice) ? params.notice[0] : params.notice;
   return (
     <div className="flex flex-col gap-4">
       {error === "link" ? (
         <Notice tone="danger">
           <p>That link has expired or was already used. Sign in, or request a new link.</p>
+        </Notice>
+      ) : null}
+      {notice === "confirmed" ? (
+        <Notice tone="good">
+          <p>Your email address is confirmed. Sign in with the password you chose.</p>
         </Notice>
       ) : null}
       <SignInForm next={rawNext ? safeNextPath(rawNext) : undefined} />
